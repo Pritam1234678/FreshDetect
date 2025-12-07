@@ -37,15 +37,18 @@ def home():
 # ---------------------------------------------------
 # MODEL LOADING
 # ---------------------------------------------------
-# Model is expected to be in the parent directory as per project structure
-MODEL_PATH = "../food_freshness_model.onnx"
+# Model path - works both locally and in Docker container
+MODEL_PATH = os.environ.get("MODEL_PATH", "../food_freshness_model.onnx")
+if not os.path.exists(MODEL_PATH):
+    # Try Docker path
+    MODEL_PATH = "/app/food_freshness_model.onnx"
 
 try:
     session = ort.InferenceSession(MODEL_PATH, providers=["CPUExecutionProvider"])
     input_name = session.get_inputs()[0].name
-    print(f"Model loaded from {MODEL_PATH}")
+    print(f"✅ Model loaded successfully from {MODEL_PATH}")
 except Exception as e:
-    print(f"Error loading model: {e}")
+    print(f"❌ Error loading model: {e}")
     session = None
 
 import base64
@@ -126,11 +129,18 @@ async def predict(file: UploadFile = File(...)):
 # STATIC FILES (Frontend Hosting)
 # ---------------------------------------------------
 # This allows the backend to serve the frontend files directly.
-# Access app at http://localhost:8000
-if os.path.exists("../frontend"):
-    app.mount("/", StaticFiles(directory="../frontend", html=True), name="frontend")
+# Access app at http://localhost:8000 or https://your-render-url.onrender.com
+FRONTEND_PATH = "../frontend"
+if not os.path.exists(FRONTEND_PATH):
+    # Try Docker path
+    FRONTEND_PATH = "/app/frontend"
+
+if os.path.exists(FRONTEND_PATH):
+    app.mount("/", StaticFiles(directory=FRONTEND_PATH, html=True), name="frontend")
+    print(f"✅ Frontend mounted from {FRONTEND_PATH}")
 else:
-    print("Warning: Frontend directory not found. API only mode.")
+    print("⚠️  Warning: Frontend directory not found. API only mode.")
+    print(f"   Tried paths: ../frontend and /app/frontend")
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
