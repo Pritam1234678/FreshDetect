@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fruit Freshness Detector</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🍏 FreshDetect</h1>
+            <p>AI-Powered Fruit Quality Assessment</p>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Upload Section -->
+            <div class="upload-card" id="drop-area">
+                <div class="icon-container">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 16V8M12 8L9 11M12 8L15 11" stroke="#00f260" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                        <path
+                            d="M20 16.7428C21.2215 16.4341 22.0607 15.3353 22 14.1667C21.9967 12.3333 20.3333 11 19 11C19 7.13401 15.866 4 12 4C8.13401 4 5 7.13401 5 11C3.66667 11 2.00333 12.3333 2 14.1667C1.93926 15.3353 2.77846 16.4341 4 16.7428"
+                            stroke="#00f260" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <h3>Upload Fruit Image</h3>
+                <p>Drag & drop or click to browse</p>
+                <input type="file" id="file-input" accept="image/*" hidden>
+                <button class="btn-primary" onclick="document.getElementById('file-input').click()">Choose File</button>
+            </div>
+
+            <!-- Preview Section (Hidden by default) -->
+            <div class="preview-card hidden" id="preview-card">
+                <div class="image-wrapper">
+                    <img id="preview-image" src="" alt="Fruit Preview">
+                    <button class="btn-close" id="remove-image">&times;</button>
+                </div>
+                <button class="btn-analyze" id="analyze-btn">Analyze Freshness</button>
+            </div>
+
+            <!-- Result Section (Hidden by default) -->
+            <div class="result-card hidden" id="result-card">
+                <h2>Analysis Result</h2>
+
+                <div class="score-container">
+                    <div class="score-label">Freshness Score</div>
+                    <div class="score-value" id="score-text">0/100</div>
+                </div>
+
+                <div class="progress-bg">
+                    <div class="progress-fill" id="progress-bar"></div>
+                </div>
+
+                <div class="category-badge" id="category-badge">
+                    Category: <span id="category-text">--</span>
+                </div>
+
+                <!-- Heatmap Section -->
+                <div class="heatmap-section hidden" id="heatmap-container">
+                    <h3>AI Visualization</h3>
+                    <p>What the model sees (Edges & Texture)</p>
+                    <div class="image-wrapper">
+                        <img id="heatmap-image" src="" alt="AI Heatmap" class="heatmap-img">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Overlay -->
+            <div class="loading-overlay hidden" id="loading-overlay">
+                <div class="spinner"></div>
+                <p>Analyzing...</p>
+            </div>
+
+        </main>
+
+        <footer>
+            <p>© 2025 FreshDetect. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
