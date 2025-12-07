@@ -29,11 +29,6 @@ except ImportError:
     print("CRITICAL ERROR: Could not import cv2. Please install opencv-python.")
     sys.exit(1)
 
-# Health Check
-@app.get("/")
-def home():
-    return {"status": "online", "message": "Fruit Freshness Backend is Running"}
-
 # ---------------------------------------------------
 # MODEL LOADING
 # ---------------------------------------------------
@@ -126,18 +121,26 @@ async def predict(file: UploadFile = File(...)):
 
 
 # ---------------------------------------------------
-# STATIC FILES (Frontend Hosting)
+# FRONTEND SERVING
 # ---------------------------------------------------
-# This allows the backend to serve the frontend files directly.
-# Access app at http://localhost:8000 or https://your-render-url.onrender.com
+# Determine frontend path (works both locally and in Docker)
 FRONTEND_PATH = "../frontend"
 if not os.path.exists(FRONTEND_PATH):
-    # Try Docker path
     FRONTEND_PATH = "/app/frontend"
 
+# Serve specific frontend files before mounting static files
+@app.get("/")
+async def serve_home():
+    """Serve the main HTML page"""
+    index_path = os.path.join(FRONTEND_PATH, "index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
+    return {"status": "online", "message": "Fruit Freshness Backend is Running", "docs": "/docs"}
+
+# Mount static files for CSS, JS, images etc.
 if os.path.exists(FRONTEND_PATH):
-    app.mount("/", StaticFiles(directory=FRONTEND_PATH, html=True), name="frontend")
-    print(f"✅ Frontend mounted from {FRONTEND_PATH}")
+    app.mount("/static", StaticFiles(directory=FRONTEND_PATH), name="static")
+    print(f"✅ Frontend files available at {FRONTEND_PATH}")
 else:
     print("⚠️  Warning: Frontend directory not found. API only mode.")
     print(f"   Tried paths: ../frontend and /app/frontend")
