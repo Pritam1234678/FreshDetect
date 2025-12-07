@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="10" fill="#ffffff"/>
+  <!-- green apple circle -->
+  <circle cx="32" cy="34" r="18" fill="#00c853"/>
+  <!-- leaf -->
+  <path d="M42 16c-1.5-6-12-8-16 2 6-2 11 1 14 6 3-3 3-5 2-8z" fill="#2e7d32" opacity="0.95"/>
+  <!-- subtle shine -->
+  <ellipse cx="25" cy="27" rx="6" ry="3" fill="#ffffff" opacity="0.25"/>
+</svg>
